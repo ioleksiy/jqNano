@@ -19,8 +19,7 @@ If you will find out that the framework is not working somewhere, please, let me
 
 # Installation
 
-The latest example of usage can be found inside `examples` folder here, or at
-http://www.jqnano.com/demo.html. Here I will describe only main steps.
+The latest example of usage can be found inside `examples` folder. Here I will describe only main steps.
 
 ## Preparation
 
