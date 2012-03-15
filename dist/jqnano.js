@@ -581,10 +581,14 @@ var jqNanoControllerManager = ( function() {
                         selectedElements.html(data(tplParams));
                         var cb = viewOptions.options.callback;
                         if (cb != null && cb != undefined) {
-                            if (typeof cb == 'string')
-                                context[cb]();
-                            else
-                                cb();
+                            try {
+                                if (typeof cb == 'string')
+                                    context[cb]();
+                                else
+                                    cb();
+                            } catch(e) {
+                                console.log(e);
+                            }
                         }
                     }
                 });
@@ -636,20 +640,25 @@ var jqNanoControllerManager = ( function() {
         if (this.initialized) return;
         this.initialized = true;
 
+        this.bindLive();
+
         try {
             $(window).hashchange(me.onHashChange);
             $(window).hashchange();
         } catch(e) {
             me.onHashChange();
         }
-
-        this.bindLive();
     }
     me.bindLive = function() {
         $('[nano-action]').live("click", function() {
             var action = $(this).attr('nano-action');
             me.run(action);
             return false;
+        });
+        $('script[nano-template]').each(function(index, e) {
+            var e = $(e);
+            var templateName = e.attr('nano-template');
+            me.templates.add(templateName, e.html());
         });
     }
     me.log = function (message) {

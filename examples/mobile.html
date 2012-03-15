@@ -12,18 +12,28 @@
     <link href="common/css/bootstrap.css" rel="stylesheet">
     <link href="common/css/bootstrap-responsive.css" rel="stylesheet">
     <script src="common/js/zepto.min.js"></script>
-    <script src="common/js/handlebars.min.js"></script>
+    <script src="common/js/deku.min.js"></script>
     <script src="../dist/jqnano.m.min.js"></script>
 
     <script src="common/js/controllers/service.js"></script>
     <script src="common/js/controllers/dashboard.js"></script>
     <script src="common/js/controllers/login.js"></script>
 
+    <script type="text/x-deku-template" nano-template="e404">
+        <h1>{{title}} 404</h1>
+        <button class="btn btn-primary" nano-action="">To Main Page</button>
+    </script>
+
+    <script type="text/x-deku-template" id="tplDashboard">
+        <h1>Hello!</h1>
+        <button class="btn btn-primary" nano-action="">Back</button>
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function(){
             $.nanoMvc({
                 error404:'e404',
-                templateCompiler:function(content) {return Handlebars.compile(content);}
+                templateCompiler:function(content) {return deku.compile(content);}
             });
         });
     </script>
