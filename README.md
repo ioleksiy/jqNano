@@ -20,7 +20,7 @@ If you will find out that the framework is not working somewhere, please, let me
 # Installation
 
 The latest example of usage can be found inside `examples` folder here, or at
-[demo section of jqNano.com][http://www.jqnano.com/demo.html]. Here I will describe only main steps.
+http://www.jqnano.com/demo.html. Here I will describe only main steps.
 
 ## Preparation
 
