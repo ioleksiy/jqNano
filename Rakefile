@@ -4,10 +4,12 @@ require 'rake/packagetask'
 
 NANO_VERSION  = "0.3"
 
-NANO_ROOT     = File.expand_path(File.dirname(__FILE__))
-NANO_SRC_DIR  = File.join(NANO_ROOT, 'src')
-NANO_DIST_DIR = File.join(NANO_ROOT, 'dist')
-NANO_PKG_DIR  = File.join(NANO_ROOT, 'pkg')
+NANO_ROOT      = File.expand_path(File.dirname(__FILE__))
+NANO_SRC_DIR   = File.join(NANO_ROOT, 'src')
+NANO_DIST_DIR  = File.join(NANO_ROOT, 'dist')
+NANO_PKG_DIR   = File.join(NANO_ROOT, 'pkg')
+NANO_PROMO_DIR = File.join(NANO_ROOT, 'promo')
+NANO_PROMS_DIR = File.join(NANO_ROOT, 'src-promo')
 
 NANO_COMPONENTS = [
   'nano.header',
@@ -29,6 +31,8 @@ NANO_COMPONENTS_MOBILE = [
 ]
 
 task :default => [:clean, :concat, :dist]
+
+task :promo => [:default, :repackage, :assemblePromo]
 
 desc "Clean the distribution directory."
 task :clean do
@@ -80,6 +84,38 @@ task :concat, [:addons] => :whitespace do |task, args|
       File.read File.join(NANO_SRC_DIR, "#{component}.js")
     }
   end
+end
+
+desc "Generate promo-page for the project"
+task :assemblePromo do
+  rm_rf NANO_PROMO_DIR
+  mkdir NANO_PROMO_DIR
+
+  file_src = File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}.zip")
+  file_dst = File.join NANO_PROMO_DIR, ("jqnano-#{NANO_VERSION}.zip")
+  cp file_src, file_dst
+
+  file_src = File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}.tar.gz")
+  file_dst = File.join NANO_PROMO_DIR, ("jqnano-#{NANO_VERSION}.tar.gz")
+  cp file_src, file_dst
+
+  src_d = File.join NANO_PROMS_DIR, "*.*"
+  FileList[src_d].each do |f|
+      target = File.join NANO_PROMO_DIR, File.basename(f)
+      cp f, target
+
+      text = File.read(target)
+      replace = text.gsub(/{VERSION}/, NANO_VERSION)
+      File.open(target, "w") {|file| file.puts replace}
+  end
+
+  rm_rf (File.join NANO_PROMO_DIR, ("dist"))
+  rm_rf (File.join NANO_PROMO_DIR, ("examples"))
+  mkdir (File.join NANO_PROMO_DIR, ("dist"))
+  mkdir (File.join NANO_PROMO_DIR, ("examples"))
+
+  FileUtils.cp_r((File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}"), "dist"), (File.join NANO_PROMO_DIR, ("dist")))
+  FileUtils.cp_r((File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}"), "examples"), (File.join NANO_PROMO_DIR, ("examples")))
 end
 
 def google_compiler(src, target)
