@@ -2,9 +2,132 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title></title>
+    <meta charset='utf-8'>
+
+    <title>jqNano {VERSION} - the minimalistic MVC framework for jQuery</title>
+
+    <style type="text/css">
+        body {
+            margin-top: 1.0em;
+            background-color: #e3effc;
+            font-family: Helvetica, Arial, FreeSans, san-serif;
+            color: #000000;
+        }
+        #container {
+            margin: 0 auto;
+            width: 700px;
+        }
+        h1 { font-size: 3.8em; color: #1c1003; margin-bottom: 3px; }
+        h1 .small { font-size: 0.4em; }
+        h1 a { text-decoration: none }
+        h2 { font-size: 1.5em; color: #1c1003; }
+        h3 { text-align: center; color: #1c1003; }
+        a { color: #1c1003; }
+        .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+        .download { float: right; }
+        pre { background: #000; color: #fff; padding: 15px;}
+        hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+        .footer { text-align:center; padding-top:30px; font-style: italic; }
+    </style>
 </head>
 <body>
-{VERSION}
+<a href="https://github.com/acropolium/jqNano"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+<div id="container">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="ioleksiy" data-size="large" data-hashtags="jqnano">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <div class="download">
+        <a href="https://github.com/acropolium/jqNano/zipball/master"><img border="0" width="90" src="https://github.com/images/modules/download/zip.png"></a>
+        <a href="https://github.com/acropolium/jqNano/tarball/master"><img border="0" width="90" src="https://github.com/images/modules/download/tar.png"></a>
+    </div>
+    <h1>
+        <a href="https://github.com/acropolium/jqNano">jqNano {VERSION}</a>
+        <span class="small">by <a href="https://github.com/acropolium">acropolium</a></span>
+    </h1>
+    <div class="description">
+        a minimalist JavaScript MVC framework
+    </div>
+
+    <h2>Description</h2>
+    <p>
+        Have you ever dreamed about tiny JS framework, which does not need a lot of time for getting it work? This
+        open-source jQuery library is made to make developer life easier and happier.
+    </p>
+    <p>Here is the example of installation (inside jQuery ready function):</p>
+    <pre>
+        $(document).ready(function(){
+            $.nanoMvc();
+        });
+    </pre>
+    <p>And this is an example of simple controller (it will react on `#` or `#default` in address bar):</p>
+    <pre>
+        NanoController.create({
+            init: function() {
+                this.action('default', function(){
+                    return this.string('Hello world!');
+                });
+            }
+        });
+    </pre>
+    <p>
+        This is all you need to start. Other features are described in <a href="https://github.com/acropolium/jqNano/wiki">wiki</a>:
+        <ul>
+            <li>Templating</li>
+            <li>Controller prefix</li>
+            <li>Default 404 handler</li>
+            <li>Result target</li>
+            <li>and many more...</li>
+        </ul>
+    </p>
+    <p>Our plans are only to make this version more stable and reliable. But not to grow it with a lot of non-needed functionality</p>
+    <p>For more information, please, read <a href="https://github.com/acropolium/jqNano/wiki">wiki</a>.</p>
+    
+    <h2>Demo</h2>
+    <p>
+        We have created a demo pages, where you can read and investigate source code with FireBug or something like this:
+        <ul>
+            <li><a href="./examples/desktop.html">Desktop version</a></li>
+            <li><a href="./examples/mobile.html">Mobile version</a></li>
+        </ul>
+    </p>
+    
+    <h2>Requirements</h2>
+    <p>
+        Desktop version requires <a href="http://jquery.com/">jQuery</a> library.
+        For mobile - <a href="http://zeptojs.com/">zepto.js</a> is enough.
+    </p>
+    <p>
+        And don't forget, that such behavior is good for standalone web-based applications, but not websites and catalogs,
+        which should be indexed by search engines.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+        Please, use GitHub's <a href="https://github.com/acropolium/jqNano/issues">issues</a> page. We will try to answer as soon as possible.
+    </p>
+
+    <h2>Download</h2>
+    <p>
+        You can download this project in either
+        <a href="https://github.com/acropolium/jqNano/zipball/master">zip</a> or
+        <a href="https://github.com/acropolium/jqNano/tarball/master">tar formats.</a>
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a> by running:
+        <pre>$ git clone git://github.com/acropolium/jqNano</pre>
+    </p>
+    <div class="footer">
+        get the source code on GitHub : <a href="https://github.com/acropolium/jqNano">acropolium/jqNano</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30115486-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
 </body>
 </html>

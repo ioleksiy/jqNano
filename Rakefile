@@ -91,14 +91,6 @@ task :assemblePromo do
   rm_rf NANO_PROMO_DIR
   mkdir NANO_PROMO_DIR
 
-  file_src = File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}.zip")
-  file_dst = File.join NANO_PROMO_DIR, ("jqnano-#{NANO_VERSION}.zip")
-  cp file_src, file_dst
-
-  file_src = File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}.tar.gz")
-  file_dst = File.join NANO_PROMO_DIR, ("jqnano-#{NANO_VERSION}.tar.gz")
-  cp file_src, file_dst
-
   src_d = File.join NANO_PROMS_DIR, "*.*"
   FileList[src_d].each do |f|
       target = File.join NANO_PROMO_DIR, File.basename(f)
@@ -109,13 +101,10 @@ task :assemblePromo do
       File.open(target, "w") {|file| file.puts replace}
   end
 
-  rm_rf (File.join NANO_PROMO_DIR, ("dist"))
-  rm_rf (File.join NANO_PROMO_DIR, ("examples"))
-  mkdir (File.join NANO_PROMO_DIR, ("dist"))
-  mkdir (File.join NANO_PROMO_DIR, ("examples"))
-
   FileUtils.cp_r((File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}"), "dist"), (File.join NANO_PROMO_DIR, ("dist")))
   FileUtils.cp_r((File.join NANO_PKG_DIR, ("jqnano-#{NANO_VERSION}"), "examples"), (File.join NANO_PROMO_DIR, ("examples")))
+  rm_rf (File.join NANO_PROMO_DIR, "examples", "desktop-dev.html")
+  rm_rf (File.join NANO_PROMO_DIR, "examples", "mobile-dev.html")
 end
 
 def google_compiler(src, target)
