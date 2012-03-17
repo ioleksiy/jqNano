@@ -43,5 +43,8 @@ var NanoController = Class.create({
     },
     view: function (code, params, loadCallBack) {
         return {type:'template', options: {code:this.getTemplateFullCode(code), params:params, callback:loadCallBack}};
+    },
+    string: function (data, loadCallBack) {
+        return {type:'string', options: {data:data, callback:loadCallBack}};
     }
 }, true);
