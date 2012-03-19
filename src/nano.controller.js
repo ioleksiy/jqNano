@@ -5,6 +5,7 @@ var NanoController = Class.create({
     autoRegister: function () {
         jqNanoControllerManager.register(this);
     },
+
     action: function (name, callback, options) {
         var item = {
             module: this,
@@ -42,9 +43,9 @@ var NanoController = Class.create({
         jqNanoControllerManager.templates.addFromElement(this.getTemplateFullCode(code), data);
     },
     view: function (code, params, loadCallBack) {
-        return {type:'template', options: {code:this.getTemplateFullCode(code), params:params, callback:loadCallBack}};
+        return NanoResult.create({type:'template', cData:this.cData, options: {code:this.getTemplateFullCode(code), params:params, callback:loadCallBack}});
     },
     string: function (data, loadCallBack) {
-        return {type:'string', options: {data:data, callback:loadCallBack}};
+        return NanoResult.create({type:'string', cData:this.cData, options: {data:data, callback:loadCallBack}});
     }
 }, true);

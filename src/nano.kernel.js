@@ -29,42 +29,7 @@ var jqNanoControllerManager = ( function() {
         }
         return o;
     }
-    me.helpCallback = function (context, cb) {
-        if (cb == null || cb == undefined) return;
-        try {
-            if (typeof cb == 'string')
-                context[cb]();
-            else
-                cb.apply(context);
-        } catch(e) {
-            console.log(e);
-        }
-    }
-    me.helpSetHtml = function(selector, data) {
-        ((selector == null || selector == undefined) ? $('body') : $(selector)).html(data);
-    }
-    me.processResult = function (selector, context, viewOptions) {
-        switch(viewOptions.type) {
-            case 'template':
-                var tplParams = viewOptions.options.params;
-                this.templates.load(viewOptions.options.code, function(code,data){
-                    if (data == null) {
-                        $.mvcLog('No template for ' + viewOptions.options.code);
-                    } else {
-                        me.helpSetHtml(selector, data(tplParams));
-                        me.helpCallback(context, viewOptions.options.callback);
-                    }
-                });
-                break;
-            case 'string':
-                var str = viewOptions.options.data;
-                me.helpSetHtml(selector, str);
-                me.helpCallback(context, viewOptions.options.callback);
-                break;
-            default:
-                break;
-        }
-    }
+
     me.run = function (fullName) {
         if (fullName.length == 0) {
             fullName = me.options.defaultRoute;
@@ -79,11 +44,17 @@ var jqNanoControllerManager = ( function() {
         if (a == null) return null;
         this.lastRun = fullName;
         $.mvcLog('Launching '+fullName);
+        var context = $.extend({
+            cData: {
+                action: a,
+                kernel: me
+            }
+        }, a.module);
         var result = null;
         try {
-            result = a.callback.apply(a.module, d.params);
-            if (result != null) {
-                this.processResult(a.options.containerSelector, a.module, result);
+            result = a.callback.apply(context, d.params);
+            if (result != null && result instanceof NanoResult) {
+                result.execute.apply(result);
             }
             if (fullName != me.options.defaultRoute)
                 window.location.hash = fullName;

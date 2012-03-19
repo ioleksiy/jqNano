@@ -59,7 +59,8 @@
             return Class;
         } else {
             var instance = new Class();
-            instance.autoRegister();
+            if (typeof(instance.autoRegister) != 'undefined')
+                instance.autoRegister();
             return instance;
         }
     };

@@ -70,11 +70,58 @@
             return Class;
         } else {
             var instance = new Class();
-            instance.autoRegister();
+            if (typeof(instance.autoRegister) != 'undefined')
+                instance.autoRegister();
             return instance;
         }
     };
 })();
+var NanoResult = Class.create({
+    type: null,
+
+    helpCallback: function (context, cb) {
+        if (cb == null || cb == undefined) return;
+        try {
+            if (typeof cb == 'string')
+                context[cb]();
+            else
+                cb.apply(context);
+        } catch(e) {
+            console.log(e);
+        }
+    },
+
+    helpSetHtml: function(selector, data) {
+        ((selector == null || selector == undefined) ? $('body') : $(selector)).html(data);
+    },
+
+    execute: function() {
+        if (this.type == null) return;
+        var selector = this.cData.action.options.containerSelector;
+        var context = this.cData.action.module;
+        var me = this;
+        switch(this.type) {
+            case 'template':
+                var tplParams = this.options.params;
+                me.cData.kernel.templates.load(this.options.code, function(code,data){
+                    if (data == null) {
+                        $.mvcLog('No template for ' + me.options.code);
+                    } else {
+                        me.helpSetHtml(selector, data(tplParams));
+                        me.helpCallback(context, me.options.callback);
+                    }
+                });
+                break;
+            case 'string':
+                var str = this.options.data;
+                me.helpSetHtml(selector, str);
+                me.helpCallback(context, this.options.callback);
+                break;
+            default:
+                break;
+        }
+    }
+}, true);
 var NanoController = Class.create({
     modulePrefix:null,
     actions: new Array(),
@@ -82,6 +129,7 @@ var NanoController = Class.create({
     autoRegister: function () {
         jqNanoControllerManager.register(this);
     },
+
     action: function (name, callback, options) {
         var item = {
             module: this,
@@ -119,10 +167,10 @@ var NanoController = Class.create({
         jqNanoControllerManager.templates.addFromElement(this.getTemplateFullCode(code), data);
     },
     view: function (code, params, loadCallBack) {
-        return {type:'template', options: {code:this.getTemplateFullCode(code), params:params, callback:loadCallBack}};
+        return NanoResult.create({type:'template', cData:this.cData, options: {code:this.getTemplateFullCode(code), params:params, callback:loadCallBack}});
     },
     string: function (data, loadCallBack) {
-        return {type:'string', options: {data:data, callback:loadCallBack}};
+        return NanoResult.create({type:'string', cData:this.cData, options: {data:data, callback:loadCallBack}});
     }
 }, true);
 var NanoTemplateEngine = Class.create({
@@ -269,42 +317,7 @@ var jqNanoControllerManager = ( function() {
         }
         return o;
     }
-    me.helpCallback = function (context, cb) {
-        if (cb == null || cb == undefined) return;
-        try {
-            if (typeof cb == 'string')
-                context[cb]();
-            else
-                cb.apply(context);
-        } catch(e) {
-            console.log(e);
-        }
-    }
-    me.helpSetHtml = function(selector, data) {
-        ((selector == null || selector == undefined) ? $('body') : $(selector)).html(data);
-    }
-    me.processResult = function (selector, context, viewOptions) {
-        switch(viewOptions.type) {
-            case 'template':
-                var tplParams = viewOptions.options.params;
-                this.templates.load(viewOptions.options.code, function(code,data){
-                    if (data == null) {
-                        $.mvcLog('No template for ' + viewOptions.options.code);
-                    } else {
-                        me.helpSetHtml(selector, data(tplParams));
-                        me.helpCallback(context, viewOptions.options.callback);
-                    }
-                });
-                break;
-            case 'string':
-                var str = viewOptions.options.data;
-                me.helpSetHtml(selector, str);
-                me.helpCallback(context, viewOptions.options.callback);
-                break;
-            default:
-                break;
-        }
-    }
+
     me.run = function (fullName) {
         if (fullName.length == 0) {
             fullName = me.options.defaultRoute;
@@ -319,11 +332,17 @@ var jqNanoControllerManager = ( function() {
         if (a == null) return null;
         this.lastRun = fullName;
         $.mvcLog('Launching '+fullName);
+        var context = $.extend({
+            cData: {
+                action: a,
+                kernel: me
+            }
+        }, a.module);
         var result = null;
         try {
-            result = a.callback.apply(a.module, d.params);
-            if (result != null) {
-                this.processResult(a.options.containerSelector, a.module, result);
+            result = a.callback.apply(context, d.params);
+            if (result != null && result instanceof NanoResult) {
+                result.execute.apply(result);
             }
             if (fullName != me.options.defaultRoute)
                 window.location.hash = fullName;

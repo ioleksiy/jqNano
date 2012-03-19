@@ -15,6 +15,7 @@ NANO_COMPONENTS = [
   'nano.header',
   'vendor.jquery.ba-hashchange.min',
   'vendor.simple-inheritance',
+  'nano.result',
   'nano.controller',
   'nano.template-engine',
   'nano.kernel',
@@ -24,6 +25,7 @@ NANO_COMPONENTS = [
 NANO_COMPONENTS_MOBILE = [
   'nano.header.m',
   'vendor.simple-inheritance',
+  'nano.result',
   'nano.controller',
   'nano.template-engine',
   'nano.kernel',
