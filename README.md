@@ -1,4 +1,4 @@
-# jqNano.js -- a minimalist JavaScript MVC framework
+# jqNano.js - a minimalist JavaScript MVC framework
 
 jqNano.js is a minimalist framework for modern browsers with a desktop and mobile support.
 
